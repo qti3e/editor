@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <title>Qti3e Editor</title>
+
+    <!-- Normalize or reset CSS with your favorite library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+
+    <!-- Load paper.css for happy printing -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.2.3/paper.css">
+    <link rel="stylesheet" href="paper-css/paper.min.css">
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css">
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="../client/app/bower_components/fontawesome/css/font-awesome.min.css">
+
+    <!-- Set page size here: A5, A4 or A3 -->
+    <!-- Set also "landscape" if you need -->
+    <style>@page { size: A4 }</style>
+    <style type="text/css">
+        html,body{
+            overflow-x: hidden;
+        }
+        @font-face {
+            font-family: 'B Yekan';
+            src: local('☺'),
+            local('B Yekan'),
+            url('resources/fonts/yekan.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        *{
+            font-family: 'B Yekan', tahoma, Arial;
+        }
+        section, .tools, .plus,.list{
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding: 10px !important;
+        }
+        .tools{
+            width: 70px !important;
+            margin-top: 0 !important;
+            position: fixed;
+            text-align: center;
+            height: 100% !important;
+        }
+        .tools > i{
+            display: block;
+            padding-bottom: 20px;
+            font-size: 150%;
+            cursor: pointer;
+        }
+        dialog{
+            position: fixed;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding: 10px !important;
+            top: 300px;
+            width: 500px;
+        }
+        .plus{
+            width: 50px !important;
+            height: 45px !important;
+            cursor: pointer;
+            text-align: center;
+        }
+        .list{
+            width: 500px !important;
+            height: 45px !important;
+            cursor: pointer;
+            text-align: left;
+        }
+        template{
+            display: inline !important;
+        }
+        /*section:first-child{*/
+            /*background-image: url(resources/logo.png);*/
+            /*!*background-size: contain;*!*/
+            /*background-repeat: no-repeat;*/
+            /*background-position: center center;*/
+        /*}*/
+        /*section:nth-child(2){*/
+            /*background-image: url(resources/besm_53.gif);*/
+            /*background-size: contain;*/
+            /*background-repeat: no-repeat;*/
+            /*-ms-background-position-y:100px;*/
+            /*background-position-y: 100px;*/
+        /*}*/
+        /*section:not(:first-child):not(:nth-child(2)){*/
+            /*-moz-background-image: url("resources/logo.png");*/
+            /*background-image: url("resources/logo.png");*/
+            /*background-repeat: no-repeat;*/
+            /*-webkit-background-size:7%;*/
+            /*background-size:7%;*/
+            /*background-position: 10px 10px;*/
+        /*}*/
+        .zoom{
+            position: fixed;
+            bottom: 0 !important;
+            right: 0 !important;
+            height: 40px !important;
+            width: 200px !important;
+            margin: 0;
+            display: none;
+        }
+        #zoom-slider{
+            top: 15px;
+        }
+        #saved{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            direction: ltr;
+            background-color: #00a379;
+            color: #fff0ff;
+            -webkit-border-radius:0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+        }
+        #add_btn{
+            width: 70px !important;
+            text-align: center;
+            direction: ltr;
+        }
+    </style>
+</head>
+
+<!-- Set "A5", "A4" or "A3" for class name -->
+<!-- Set also "landscape" if you need -->
+<body class="A4">
+<div class="tools sheet" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;"
+     unselectable="on"
+     onselectstart="return false;"
+     onmousedown="return false;">
+    <i id="edit_align_left" class="fa fa-align-left"></i>
+    <i id="edit_align_center" class="fa fa-align-center"></i>
+    <i id="edit_align_right" class="fa fa-align-right"></i>
+    <i id="edit_paragraph" class="fa fa-paragraph"></i>
+    <i id="edit_header" class="fa fa-header"></i>
+    <i id="edit_italic" class="fa fa-italic"></i>
+    <i id="edit_underline" class="fa fa-underline"></i>
+    <i id="edit_link" class="fa fa-link"></i>
+    <i id="edit_bold" class="fa fa-bold"></i>
+    <i id="edit_pic" class="fa fa-picture-o"></i>
+    <i id="edit_quote" class="fa fa-quote-left"></i>
+    <i id="edit_print" class="fa fa-print"></i>
+</div>
+<!-- Each sheet element should have the class "sheet" -->
+<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
+<div id="content">
+    <!--<section class="sheet padding-10mm"><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><h1><p style="text-align: center">شرح پروژه اسلای</p></h1><p style="text-align: center"></p><p style="text-align: center"></p><p style="text-align: center">علیرضا قدیمی - بنیامین شیعی - حسین هاشمی - علی صالح زاده</p><p style="text-align: center">زمستان ۱۳۹۵ و بهار ۹۶</p></div></section><section class="sheet padding-10mm"> </section><section class="sheet padding-10mm"><div><h1></h1><h1>چکیده</h1></div><div><b></b><p>اسلای (Slye) یک نرم افزار چند سکویی (به صورت عمده تحت وب)‌ برای ایجاد ، اشتراک گذاری و توسعه ارائه های سه بعدی بر بستر  وب میباشد.</p></div><div><p>درکنار این برنامه امکانات جانبی دیگر نیز وجود دارد که اصلی ترین آنها SlyePDK (کیت توسعه پلاگین اسلای) میباشد. این ابزار قابلیت توسعه ماژول های جانبی را به دیگر توسعه دهندگان (افراد خارج از هسته پروژه) میدهد، توسعه دهندگان میتوانند پلاگین های خود را در فروشگاه نرم افزار قرار دهند. (ممکن است برخی از آنها رایگان باشند.)</p><p>بخش های اصلی نرم افزار (که در فصل های بعدی آنها را بصورت دقیق تر بررسی خواهیم کرد) :</p><p>&nbsp; &nbsp;۱. ویرایشگر</p><p>&nbsp; &nbsp;۲. فروشگاه</p><p>&nbsp; &nbsp;۳. شبکه اجتماعی (محل اشتراک گذاری ارائه ها)</p><p>&nbsp; &nbsp;۴. کیت توسعه پلاگین</p><p>که تمامی این بخش ها بصورت یکپارچه میباشند و با استفاده از یک حساب کاربری قابل دسترس میباشند.</p></div></section><section class="sheet padding-10mm"><h1>مقدمه</h1><div><blockquote>«من میتوانم با رنگ و اشکال چیز هایی را بگویم ، که به هیچ طریق دیگری نمیتوانستم.»</blockquote><blockquote><p style="text-align: left">Georgia O'Keeffe</p></blockquote></div><div>پیش از هرچیز مایلم تشکر خود را تقدیم شما نماییم که قصد خواندن این مقاله را دارید.</div><div><p>یکی از سخت ترین کار ها در این جهان راضی کردن دیگران است، شما ممکن است این کار را با ایجاد یک ارائه جذاب که آنها را تحت تاثیر قرار دهد انجام دهید.</p><p>اما یکی از مشکلات اصلی این کار صرف زمان بسیار زیادی بر روی ایجاد ارائه است که ممکن است در نهایت نتیجه مطلوبی نیز ایجاد نشود.</p><p>اسلای با قابلیت ایجاد ارائه های سه بعدی به افراد این قابلیت را میدهد که با صرف زمانی <b>بسیار کوتاه</b> ارائه های جذاب و خیره کننده ای را که هرکسی را مجذوب خود میکنند، بسازند.</p><p>در حقیقت اسلای یک ویرایشگر ماژولار برای فریمورک محبوب <b>Impress.js</b> &nbsp;می باشد، &nbsp;که تنها برنامه نویسان و کسانی که با توسعه وب آشنایی دارند میتوانند با این فریمورک کار نمایند، این امر ما را بر آن داشت تا گامی برداریم تا به تمام افراد (حتی بدون هیچ دانش برنامه نویسی) این امکان را بدهیم که بتوانند از مزایای این فریمورک محبوب استفاده نمایند.</p><p>در فصل اول به مطالعه جزئی بخش های مختلف برنامه میپردازیم و در فصل بعدی آن به صورت کاملا عمیق وارد جزئیات کیت توسعه پلاگین میشویم و پس از آن موارد مشابه را بررسی و تحلیل مینماییم.</p><p></p><p style="text-align: left">«تیم توسعه اسلای» &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</p><p style="text-align: left"></p><p style="text-align: left"></p><p></p></div></section><section class="sheet padding-10mm"><h1><p style="text-align: center"><br></p><p style="text-align: center"><br></p><p style="text-align: center"><br></p><p style="text-align: center"><br></p><p style="text-align: center"><br></p><p style="text-align: center">فصل اول: بخش های نرم افزار</p></h1><div>در این فصل به مطالعه و بررسی بخش های مختلف نرم افزار میپردازیم:</div><div>&nbsp; &nbsp; در بخش اول به مطالعه بخش اصلی نرم افزار یعنی <b>ویرایشگر</b> آن خواهیم پرداخت.</div><div>&nbsp; &nbsp; سپس شبکه اجتماعی اسلای را مورد بحث قرار میدهیم</div><div>&nbsp; &nbsp;و سپس وارد بخش های مربوط به توسعه دهندگان از قبیل کیت توسعه پلاگین و فروشگاه میشویم</div></section>-->
+
+</div>
+
+
+<div class="list sheet" id="add_btn">
+    <i class="fa fa-plus"></i> New
+</div>
+
+<div class="plus sheet" id="plus">
+    <i class="fa fa-plus"></i>
+</div>
+<div id="saved"><i class="fa fa-check"></i> Saved...</div>
+<dialog>a</dialog>
+
+<div class="zoom sheet" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;"
+     unselectable="on"
+     onselectstart="return false;"
+     onmousedown="return false;">
+    <div id="zoom-slider"></div>
+</div>
+<script type="application/javascript" src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+<script type="application/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script type="application/javascript">
+    function changeLink(ele) {
+        var link = prompt('URL', $(ele).attr('href'));
+        if(link !== null)
+            $(ele).attr('href', link);
+//        else
+//            $(ele).attr('href', 'javascript:;');
+    }
+    function start(db){
+        var zoom = 95;
+        $("#content").css('zoom', zoom / 100);
+        $( function() {
+            $( "#zoom-slider" ).slider({
+                step: 5,
+                min: 10,
+                max: 200,
+                value: zoom,
+                change: function( event, ui ) {
+                    $("#content").css('zoom', ui.value / 100);
+                }
+            });
+        } );
+        $('#saved').hide();
+        function save() {
+            var html = '';
+            $('#content > section').each(function () {
+                html += '<section class="sheet padding-10mm">'+$(this).html()+'</section>';
+            });
+            localStorage.setItem(db, html);
+            $('#saved').show(500);
+            setTimeout(function () {
+                $('#saved').hide(500);
+            }, 1500)
+        }
+        setInterval(save, 3000);
+        if(localStorage.getItem(db)){
+            $("#content").html(localStorage.getItem(db))
+        }
+        var editable = function () {
+            $('section').attr('contenteditable', 'true');
+        };
+        editable();
+        function replaceSelectedText(html) {
+            var sel, range;
+            if (window.getSelection) {
+                // IE9 and non-IE
+                sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) {
+                    range = sel.getRangeAt(0);
+                    range.deleteContents();
+
+                    // Range.createContextualFragment() would be useful here but is
+                    // only relatively recently standardized and is not supported in
+                    // some browsers (IE9, for one)
+                    var el = document.createElement("div");
+                    el.innerHTML = html;
+                    var frag = document.createDocumentFragment(), node, lastNode;
+                    while ( (node = el.firstChild) ) {
+                        lastNode = frag.appendChild(node);
+                    }
+                    range.insertNode(frag);
+
+                    // Preserve the selection
+                    if (lastNode) {
+                        range = range.cloneRange();
+                        range.setStartAfter(lastNode);
+                        range.collapse(true);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
+                }
+            } else if (document.selection && document.selection.type != "Control") {
+                // IE < 9
+                document.selection.createRange().pasteHTML(html);
+            }
+        }
+        function getSelection () {
+            return ( '' )
+                    ? document.selection
+                    : ( window.getSelection || document.getSelection )();
+        }
+
+
+        $('#edit_align_left').click(function () {
+            replaceSelectedText('<p style="text-align: left">'+getSelection()+'</p>');
+        });
+        $('#edit_align_right').click(function () {
+            replaceSelectedText('<p style="text-align: right">'+getSelection()+'</p>');
+        });
+        $('#edit_align_center').click(function () {
+            replaceSelectedText('<p style="text-align: center">'+getSelection()+'</p>');
+        });
+        $('#edit_paragraph').click(function () {
+            replaceSelectedText('<p>'+getSelection()+'</p>');
+        });
+        $('#edit_header').click(function () {
+            replaceSelectedText('<h1>'+getSelection()+'</h1>');
+        });
+        $('#edit_italic').click(function () {
+            replaceSelectedText('<i>'+getSelection()+'</i>');
+        });
+        $('#edit_underline').click(function () {
+            replaceSelectedText('<u>'+getSelection()+'</u>');
+        });
+        $('#edit_bold').click(function () {
+            replaceSelectedText('<b>'+getSelection()+'</b>');
+        });
+        $('#edit_quote').click(function () {
+            replaceSelectedText('<blockquote>'+getSelection()+'</blockquote>');
+        });
+        $('#edit_save').click(function () {
+            save();
+        });
+        $('#edit_link').click(function () {
+            var link = prompt('URL:');
+            if(link !== null)
+                replaceSelectedText('<a onclick="changeLink(this)" href="'+link+'">'+getSelection()+'</a>');
+        });
+        $('#edit_pic').click(function () {
+            var link = prompt('SRC:');
+            if(link !== null)
+                replaceSelectedText('<p style="text-align: center;"><img onclick="changePic(this)" width="750" src="'+link+'" /></p>');
+        });
+        $('#plus').click(function () {
+            $('#content').append('<section class="sheet padding-10mm"> </section>');
+            editable();
+        });
+        const unprint = $('.tools,#plus,#saved');
+        $('#edit_print').click(function () {
+            unprint.hide();
+            window.print();
+            unprint.show();
+        })
+    }
+    $(document).ready(function(){
+        const saved = $('#saved');
+        const unprint = $('.tools,#plus,#saved');
+        const content = $('#content');
+        const add_btn = $('#add_btn');
+        const title = $('title');
+        unprint.hide();
+        var html = '',
+                i, key, name;
+//        var list = localStorage.le
+        for(i = 0;i < localStorage.length;i++){
+            key = localStorage.key(i);
+            if(key.substr(0, 7) == 'editor_'){
+                name = key.substr(7,key.length);
+                html += '<div class="list sheet" data-load="'+key+'">'+name+'</div>'
+            }
+        }
+        content.html(html);
+        $('#content div').click(function () {
+            var t = $(this),
+                    l = t.data('load');
+            if(l && l.substr(0, 7) == 'editor_'){
+                content.html('');
+                add_btn.hide();
+                title.text(l.substr(7, l.length)+' | Qti3e Editor');
+                start(l);
+                unprint.show();
+            }
+        });
+        add_btn.click(function () {
+            var db = prompt("Please insert file name:", 'New Document');
+            if(db != null){
+                db = 'editor_' + db;
+                if(localStorage[db] !== undefined){
+                    alert("File already exists.")
+                }else {
+                    content.html('');
+                    add_btn.hide();
+                    title.text(db.substr(7, db.length)+' | Qti3e Editor');
+                    start(db);
+                    unprint.show();
+                }
+            }
+        })
+    })
+</script>
+</body>
+</html>
